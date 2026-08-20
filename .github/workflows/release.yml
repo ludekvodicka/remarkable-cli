@@ -1,0 +1,29 @@
+name: Release
+
+# Publishes from a tag through npm trusted publishing: the OIDC identity of this workflow replaces the
+# token, so no npm secret lives in this repository and no 2FA prompt appears. Configure the trusted
+# publisher once at https://www.npmjs.com/package/rmcli/access with this exact workflow filename.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: "https://registry.npmjs.org"
+      # Trusted publishing needs npm 11.5.1 or newer, which is ahead of the bundled version.
+      - run: npm install -g npm@latest
+      - run: npm ci
+      - run: npm run check
+      - run: npm publish --provenance
