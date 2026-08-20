@@ -1,10 +1,20 @@
-# rmcli
+# remarkable-cli
 
-Command line over [`rmscene-ts`](https://github.com/ludekvodicka/rmscene-ts) and [`rmcommunication-ts`](https://github.com/ludekvodicka/rmcommunication-ts) for
+The `rmcli` command line over [`rmscene-ts`](https://github.com/ludekvodicka/rmscene-ts) and [`rmcommunication-ts`](https://github.com/ludekvodicka/rmcommunication-ts) for
 reMarkable tablets in developer mode. It is a thin mapping of those libraries: every capability lives in
 them, and `rmcli` only parses arguments, calls one library function, and prints the result.
 
 ## Install
+
+```sh
+npm install -g remarkable-cli
+rmcli --help
+```
+
+The package is named `remarkable-cli` on npm because the shorter name is taken; the command it installs
+is `rmcli`.
+
+To work on it from a checkout instead:
 
 ```sh
 npm install
@@ -12,7 +22,7 @@ npm run build
 node dist/cli.js --help
 ```
 
-Node 20.9 or newer. Both libraries are consumed through local `file:` links until they are published.
+Node 20.9 or newer.
 
 `SKILL.md` in this package is the agent-facing guide: what to run for a given request, and what not
 to do. Point an AI assistant at it rather than at this README.
