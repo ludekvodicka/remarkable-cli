@@ -1,6 +1,6 @@
 # rmcli
 
-Command line over [`rmscene-ts`](../rmscene-ts) and [`rmcommunication-ts`](../rmcommunication-ts) for
+Command line over [`rmscene-ts`](https://github.com/ludekvodicka/rmscene-ts) and [`rmcommunication-ts`](https://github.com/ludekvodicka/rmcommunication-ts) for
 reMarkable tablets in developer mode. It is a thin mapping of those libraries: every capability lives in
 them, and `rmcli` only parses arguments, calls one library function, and prints the result.
 
@@ -118,6 +118,11 @@ than per-connection. `rmcli` therefore takes a lock file per host for the whole 
 on this machine cannot interleave a folder selection with someone else's upload. Runs from different
 machines are not covered; a single owning service is the real answer to that.
 
-## License
+## License and credits
 
-MIT
+MIT.
+
+`rmcli` is a thin command line over [`rmcommunication-ts`](https://github.com/ludekvodicka/rmcommunication-ts)
+and [`rmscene-ts`](https://github.com/ludekvodicka/rmscene-ts). The `.rm` scene format itself was worked
+out by [`rmscene`](https://github.com/ricklupton/rmscene), the Python library that `rmscene-ts` was
+rewritten from.
