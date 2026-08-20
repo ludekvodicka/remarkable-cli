@@ -1,0 +1,7 @@
+node_modules/
+dist/
+coverage/
+*.tgz
+
+# AI workflow artifacts stay in the private working copy
+.aidocs/

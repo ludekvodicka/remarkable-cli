@@ -1,0 +1,60 @@
+{
+  "name": "rmcli",
+  "version": "0.1.0",
+  "description": "Command line over rmscene-ts and rmcommunication-ts for reMarkable tablets",
+  "keywords": [
+    "remarkable",
+    "cli",
+    "ssh",
+    "rmdoc",
+    "typescript"
+  ],
+  "homepage": "https://github.com/ludekvodicka/rmcli#readme",
+  "bugs": {
+    "url": "https://github.com/ludekvodicka/rmcli/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ludekvodicka/rmcli.git"
+  },
+  "author": "Ludek Vodicka",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "rmcli": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "SKILL.md"
+  ],
+  "engines": {
+    "node": ">=20.9"
+  },
+  "overrides": {
+    "esbuild": "0.28.2"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:package": "npm run build && node dist/cli.js --help",
+    "check": "npm run typecheck && npm run test && npm run test:package",
+    "prepublishOnly": "node scripts/check-release-dependencies.mjs && npm run check && publint"
+  },
+  "dependencies": {
+    "pdf-lib": "1.17.1",
+    "rmcommunication-ts": "file:../rmcommunication-ts",
+    "rmscene-ts": "file:../rmscene-ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "publint": "^0.3.23",
+    "tsup": "^8.5.1",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  }
+}
