@@ -1,6 +1,13 @@
 # Changelog
 
-## 0.1.0 - unreleased
+## 0.1.1 - 2026-08-20
+
+- Consumes the published libraries instead of local `file:` links.
+- Documents that the package is `remarkable-cli` on npm while the installed command stays `rmcli`, and
+  links the three packages of the family to each other.
+- Records the approved `esbuild` install script, which npm 12 otherwise skips.
+
+## 0.1.0 - 2026-08-20
 
 - Adds a command line over `rmscene-ts` and `rmcommunication-ts` that holds no domain logic of its own:
   each command parses arguments, calls one library function, and prints the result.

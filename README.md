@@ -134,7 +134,7 @@ machines are not covered; a single owning service is the real answer to that.
 | --- | --- |
 | [`rmscene-ts`](https://github.com/ludekvodicka/rmscene-ts) ([npm](https://www.npmjs.com/package/rmscene-ts)) | Reads, writes and renders `.rm` version 6 scene files. No filesystem, no network, browser-safe. |
 | [`rmcommunication-ts`](https://github.com/ludekvodicka/rmcommunication-ts) ([npm](https://www.npmjs.com/package/rmcommunication-ts)) | Talks to the tablet over pinned SSH: listings, verified rmdoc backups, page rendering, templates, PNG, PDF and EPUB import. |
-| [`remarkable-cli`](https://github.com/ludekvodicka/rmcli) ([npm](https://www.npmjs.com/package/remarkable-cli)) | The `rmcli` command line over both libraries. |
+| [`remarkable-cli`](https://github.com/ludekvodicka/remarkable-cli) ([npm](https://www.npmjs.com/package/remarkable-cli)) | The `rmcli` command line over both libraries. |
 
 None of them implements the reMarkable Cloud protocol.
 

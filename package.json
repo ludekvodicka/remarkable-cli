@@ -1,6 +1,6 @@
 {
   "name": "remarkable-cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Command line over rmscene-ts and rmcommunication-ts for reMarkable tablets",
   "keywords": [
     "remarkable",
@@ -9,13 +9,13 @@
     "rmdoc",
     "typescript"
   ],
-  "homepage": "https://github.com/ludekvodicka/rmcli#readme",
+  "homepage": "https://github.com/ludekvodicka/remarkable-cli#readme",
   "bugs": {
-    "url": "https://github.com/ludekvodicka/rmcli/issues"
+    "url": "https://github.com/ludekvodicka/remarkable-cli/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ludekvodicka/rmcli.git"
+    "url": "git+https://github.com/ludekvodicka/remarkable-cli.git"
   },
   "author": "Ludek Vodicka",
   "license": "MIT",
