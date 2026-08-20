@@ -101,6 +101,21 @@ describe("command dispatch", () => {
     expect(downloads).toEqual([{ documentId: DOCUMENT_ID, backupDirectory: resolve("./backups") }]);
   });
 
+  it("takes the per-host lock around an ordinary command", async () => {
+    const { runtime, locks } = harness();
+    await run(["documents", "list", "--json"], runtime);
+    expect(locks).toEqual(["acquired", "released"]);
+  });
+
+  it("registers the mirror group among the commands that leave the tablet running", async () => {
+    const { runtime, out } = harness();
+    await run(["--help"], runtime);
+    const help = out.join("");
+    const live = help.slice(0, help.indexOf("Commands that stop and restart Xochitl"));
+    expect(live).toContain("mirror sync");
+    expect(live).toContain("mirror watch");
+  });
+
   it("writes a template to the requested file instead of stdout", async () => {
     const directory = await temporaryRoot();
     const output = join(directory, "nested", "template.json");
@@ -221,11 +236,15 @@ function harness(): {
   readonly err: string[];
   readonly uploads: unknown[];
   readonly downloads: unknown[];
+  readonly mirrorSyncs: unknown[];
+  readonly locks: string[];
 } {
   const out: string[] = [];
   const err: string[] = [];
   const uploads: unknown[] = [];
   const downloads: unknown[] = [];
+  const mirrorSyncs: unknown[] = [];
+  const locks: string[] = [];
   const backup = {
     archivePath: "backups/fixture.rmdoc",
     archiveBytes: 1234,
@@ -291,6 +310,19 @@ function harness(): {
     readTemplate: async () => ({ items: [] }),
     snapshotDocument: async () => ({ documentId: DOCUMENT_ID }),
     mirrorDocuments: async () => ({ generation: "1" }),
+    syncMirror: async (mirrorDirectory: string, options: Record<string, unknown>) => {
+      mirrorSyncs.push({ mirrorDirectory, ...options });
+      return {
+        downloaded: ["doc.metadata"],
+        deleted: [],
+        skippedUnstable: [],
+        changedDocumentIds: [DOCUMENT_ID],
+        openDocument: { documentId: null, name: null, pageId: null, pageNumber: null, pageIndex: null, pageCount: null, observedAt: OBSERVED_AT },
+        templatesSynced: true,
+        finishedAt: OBSERVED_AT,
+        localDurability: "file-and-directory",
+      };
+    },
     writePage: async () => ({ documentId: DOCUMENT_ID }),
   } as unknown as Device;
   return {
@@ -298,11 +330,21 @@ function harness(): {
     err,
     uploads,
     downloads,
+    mirrorSyncs,
+    locks,
     runtime: {
       streams: { out: (text) => out.push(text), err: (text) => err.push(text) },
       withWeb: async (operation) => await operation(web),
       withDevice: async (operation) => await operation(device),
       discoverFingerprint: async () => ({ host: "10.0.0.1", fingerprint: `SHA256:${"A".repeat(43)}` }),
+      withLock: async (operation) => {
+        locks.push("acquired");
+        try {
+          return await operation();
+        } finally {
+          locks.push("released");
+        }
+      },
     },
   };
 }

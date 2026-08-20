@@ -14,12 +14,13 @@ try {
   const settings = readSettings(process.env);
   // Built on demand: `device fingerprint` is the one command that runs before a host key is pinned.
   const pinned = () => deviceProfile(settings, process.env);
-  await withDeviceLock(settings.host, async () => await run(argv, {
+  await run(argv, {
     streams: processStreams,
     withWeb: async (operation) => await withWebInterface(pinned(), settings.requestTimeoutMs, operation),
     withDevice: async (operation) => await withDevice(pinned(), operation),
     discoverFingerprint: async () => await readHostFingerprint(settings, process.env),
-  }));
+    withLock: async (operation) => await withDeviceLock(settings.host, operation),
+  });
 } catch (error) {
   processStreams.err(`${message(error)}\n`);
   process.exit(1);

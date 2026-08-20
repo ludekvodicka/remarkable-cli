@@ -16,6 +16,7 @@ import {
   deviceStatus,
   templatesRead,
 } from "./commands/device.js";
+import { mirrorSync, mirrorWatch } from "./commands/mirror.js";
 import { pagesList, pagesRender } from "./commands/pages.js";
 import {
   serviceDocumentsList,
@@ -39,6 +40,8 @@ export const COMMANDS: readonly Command[] = [
   documentsGet,
   documentsDownload,
   documentsUpload,
+  mirrorSync,
+  mirrorWatch,
   pagesList,
   pagesRender,
   templatesRead,
@@ -54,6 +57,7 @@ export interface Runtime {
   readonly withWeb: <T>(operation: (web: WebInterfaceClient) => Promise<T>) => Promise<T>;
   readonly withDevice: <T>(operation: (device: Device) => Promise<T>) => Promise<T>;
   readonly discoverFingerprint: () => Promise<{ readonly host: string; readonly fingerprint: string }>;
+  readonly withLock: <T>(operation: () => Promise<T>) => Promise<T>;
 }
 
 export function resolveCommand(tokens: readonly string[]): { readonly command: Command; readonly positionals: readonly string[] } {
@@ -80,7 +84,8 @@ export async function run(argv: readonly string[], runtime: Runtime): Promise<vo
       `${command.path.join(" ")} stops and restarts Xochitl, which interrupts the tablet UI.`
       + ` Repeat the command with --service if that is intended.`,
     );
-  await command.run({
+  const passThrough = async <T>(operation: () => Promise<T>): Promise<T> => await operation();
+  const context = {
     streams: runtime.streams,
     json: parsed.flag("json"),
     options: parsed,
@@ -88,7 +93,11 @@ export async function run(argv: readonly string[], runtime: Runtime): Promise<vo
     withWeb: runtime.withWeb,
     withDevice: runtime.withDevice,
     discoverFingerprint: runtime.discoverFingerprint,
-  });
+    // A watch loop would otherwise hold the per-host lock for as long as it runs.
+    withLock: command.longLived === true ? runtime.withLock : passThrough,
+  };
+  if (command.longLived === true) await command.run(context);
+  else await runtime.withLock(async () => await command.run(context));
 }
 
 export function helpText(): string {

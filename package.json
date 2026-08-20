@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "pdf-lib": "1.17.1",
-    "rmcommunication-ts": "^0.1.0",
+    "rmcommunication-ts": "file:../rmcommunication-ts",
     "rmscene-ts": "^0.1.0"
   },
   "devDependencies": {

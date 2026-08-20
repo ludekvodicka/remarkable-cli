@@ -51,6 +51,7 @@ the password from its stdout, which is where a password manager or a secret stor
 | a local copy | `rmcli documents download <documentId> --backup-dir <dir> --json` |
 | a PDF, EPUB or image on the tablet | `rmcli documents upload <file> --name <name> --backup-dir <dir> [--folder <id>] --json` |
 | device and connection state | `rmcli device status --json` |
+| a local copy of everything, kept fresh | `rmcli mirror sync --mirror-dir <dir> --json`, below |
 
 Pass `--json` whenever you will decide something from the output. Read the plain table only when
 showing it to a person.
@@ -131,6 +132,27 @@ command verifies the upload by fetching the document back and keeps that archive
 **On an ambiguous import, do not upload again.** The document may already be on the tablet. List the
 documents, look for one matching the source, and report what you found. The same holds for an upload
 that failed loudly: the tablet may have filed the document anyway.
+
+## Mirroring
+
+```sh
+rmcli mirror sync --mirror-dir <dir> --json
+rmcli mirror watch --mirror-dir <dir> --interval 300
+```
+
+`mirror sync` keeps `<dir>/xochitl` a byte copy of the tablet's storage and `<dir>/templates` a copy of
+its templates, then writes `<dir>/state.json` with the open document and the run's counters. It reads
+only: nothing is stopped, nothing is written to the tablet, so it is safe while someone is writing on
+it. A file that changes mid-download keeps its previous copy and lands in `skippedUnstable`, healed by
+the next run. `mirror watch` is the same run on an interval until Ctrl-C.
+
+Deletions on the tablet delete the local copy too, because this is a mirror. A run that would empty the
+mirror, or one where the tablet lists no `.metadata` file at all, stops with a `mirror-guard` error
+instead; pass `--accept-wiped-device` only when the tablet really was wiped.
+
+This is not the same thing as `rmcli service mirror`, which stops Xochitl to take a verified
+point-in-time generation. Use `mirror sync` for the continuous copy, the service command for a backup
+taken before something risky.
 
 ## Paths
 
