@@ -16,7 +16,8 @@ import {
   deviceStatus,
   templatesRead,
 } from "./commands/device.js";
-import { mirrorSync, mirrorWatch } from "./commands/mirror.js";
+import { mcpServe } from "./commands/mcp.js";
+import { mirrorIndex, mirrorPage, mirrorSearch, mirrorStatus, mirrorSync, mirrorWatch } from "./commands/mirror.js";
 import { pagesList, pagesRender } from "./commands/pages.js";
 import {
   serviceDocumentsList,
@@ -42,6 +43,11 @@ export const COMMANDS: readonly Command[] = [
   documentsUpload,
   mirrorSync,
   mirrorWatch,
+  mirrorIndex,
+  mirrorSearch,
+  mirrorPage,
+  mirrorStatus,
+  mcpServe,
   pagesList,
   pagesRender,
   templatesRead,
@@ -96,7 +102,7 @@ export async function run(argv: readonly string[], runtime: Runtime): Promise<vo
     // A watch loop would otherwise hold the per-host lock for as long as it runs.
     withLock: command.longLived === true ? runtime.withLock : passThrough,
   };
-  if (command.longLived === true) await command.run(context);
+  if (command.longLived === true || command.local === true) await command.run(context);
   else await runtime.withLock(async () => await command.run(context));
 }
 

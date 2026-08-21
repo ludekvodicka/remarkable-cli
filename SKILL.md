@@ -51,7 +51,8 @@ the password from its stdout, which is where a password manager or a secret stor
 | a local copy | `rmcli documents download <documentId> --backup-dir <dir> --json` |
 | a PDF, EPUB or image on the tablet | `rmcli documents upload <file> --name <name> --backup-dir <dir> [--folder <id>] --json` |
 | device and connection state | `rmcli device status --json` |
-| a local copy of everything, kept fresh | `rmcli mirror sync --mirror-dir <dir> --json`, below |
+| a local copy of everything, kept fresh | `rmcli mirror sync --mirror-dir <dir> --index --json`, below |
+| to find a document by what is written in it | `rmcli mirror search <query> --mirror-dir <dir> --json` |
 
 Pass `--json` whenever you will decide something from the output. Read the plain table only when
 showing it to a person.
@@ -150,9 +151,38 @@ Deletions on the tablet delete the local copy too, because this is a mirror. A r
 mirror, or one where the tablet lists no `.metadata` file at all, stops with a `mirror-guard` error
 instead; pass `--accept-wiped-device` only when the tablet really was wiped.
 
+### Searching the mirror
+
+```sh
+rmcli mirror index --mirror-dir <dir> --json
+rmcli mirror search "architecture" --mirror-dir <dir> --json
+rmcli mirror page <documentId> <page> --mirror-dir <dir> --output <dir>/page.png
+rmcli mirror status --mirror-dir <dir> --json
+```
+
+`mirror index` builds the catalog, renders the pages that changed and extracts typed text, so `search`
+matches document names, folder paths and what is typed on a page. Add `--index` to `mirror sync` or
+`mirror watch` to do it in the same run. These four commands and `mcp serve` read the local mirror
+only: they need no tablet, no `RMCLI_HOST` and no `RMCLI_FINGERPRINT`, and they never take the device
+lock.
+
+**The mirror is a snapshot, not the tablet.** `mirror status` prints when it was last synced. For what
+is open right now, ask the tablet with `documents current`.
+
 This is not the same thing as `rmcli service mirror`, which stops Xochitl to take a verified
 point-in-time generation. Use `mirror sync` for the continuous copy, the service command for a backup
 taken before something risky.
+
+## Serving the mirror to an agent
+
+```sh
+rmcli mcp serve --mirror-dir <dir>
+```
+
+Speaks MCP over stdio with six read-only tools: `search`, `list_documents`, `get_document`,
+`get_page_image`, `get_open_document`, `mirror_status`. It opens no device connection and needs no
+credentials, so it can keep answering while the tablet sleeps. There is deliberately no sync, write or
+delete tool: syncing is `rmcli mirror sync`, and nothing here can change the tablet.
 
 ## Paths
 

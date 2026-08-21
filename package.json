@@ -46,9 +46,12 @@
     "prepublishOnly": "node scripts/check-release-dependencies.mjs && npm run check && publint"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
     "pdf-lib": "1.17.1",
     "rmcommunication-ts": "file:../rmcommunication-ts",
-    "rmscene-ts": "^0.1.0"
+    "rmindex-ts": "file:../rmindex-ts",
+    "rmscene-ts": "^0.1.0",
+    "zod": "4.4.3"
   },
   "devDependencies": {
     "@types/node": "^20.19.43",

@@ -28,5 +28,7 @@ export interface Command {
   readonly interrupts: boolean;
   /** True when the command runs until interrupted, so it must lock per iteration instead of for its whole run. */
   readonly longLived?: boolean;
+  /** True when the command only reads local files, so it needs no device, no host settings and no lock. */
+  readonly local?: boolean;
   run(context: CliContext): Promise<void>;
 }

@@ -11,15 +11,18 @@ try {
     processStreams.out(`${helpText()}\n`);
     process.exit(0);
   }
-  const settings = readSettings(process.env);
-  // Built on demand: `device fingerprint` is the one command that runs before a host key is pinned.
-  const pinned = () => deviceProfile(settings, process.env);
+  // Resolved on demand: the mirror and MCP commands read local files only and must run without any
+  // RMCLI_HOST or RMCLI_FINGERPRINT in the environment.
+  let settings: ReturnType<typeof readSettings> | null = null;
+  const resolved = () => settings ??= readSettings(process.env);
+  // Built on demand too: `device fingerprint` is the one command that runs before a host key is pinned.
+  const pinned = () => deviceProfile(resolved(), process.env);
   await run(argv, {
     streams: processStreams,
-    withWeb: async (operation) => await withWebInterface(pinned(), settings.requestTimeoutMs, operation),
+    withWeb: async (operation) => await withWebInterface(pinned(), resolved().requestTimeoutMs, operation),
     withDevice: async (operation) => await withDevice(pinned(), operation),
-    discoverFingerprint: async () => await readHostFingerprint(settings, process.env),
-    withLock: async (operation) => await withDeviceLock(settings.host, operation),
+    discoverFingerprint: async () => await readHostFingerprint(resolved(), process.env),
+    withLock: async (operation) => await withDeviceLock(resolved().host, operation),
   });
 } catch (error) {
   processStreams.err(`${message(error)}\n`);
