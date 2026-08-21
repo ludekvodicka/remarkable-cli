@@ -110,7 +110,7 @@ export function helpText(): string {
   const live = COMMANDS.filter((command) => !command.interrupts);
   const service = COMMANDS.filter((command) => command.interrupts);
   return [
-    "rmcli — command line over rmscene-ts and rmcommunication-ts",
+    "rmcli, command line over rmscene-ts, rmcommunication-ts and rmindex-ts",
     "",
     "Commands that leave the tablet running:",
     table(live.map((command) => [`  ${command.path.join(" ")}`, command.summary])),
