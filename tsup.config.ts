@@ -8,7 +8,7 @@ export default defineConfig({
   sourcemap: true,
   splitting: false,
   platform: "node",
-  target: "node20",
+  target: "node22",
   external: ["rmcommunication-ts", "rmscene-ts", "sharp", "ssh2"],
   banner: { js: "#!/usr/bin/env node" },
   outExtension() {

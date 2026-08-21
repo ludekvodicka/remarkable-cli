@@ -31,7 +31,7 @@
     "SKILL.md"
   ],
   "engines": {
-    "node": ">=20.9"
+    "node": ">=22"
   },
   "overrides": {
     "esbuild": "0.28.2"
@@ -48,8 +48,8 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.30.0",
     "pdf-lib": "1.17.1",
-    "rmcommunication-ts": "file:../rmcommunication-ts",
-    "rmindex-ts": "file:../rmindex-ts",
+    "rmcommunication-ts": "^0.2.0",
+    "rmindex-ts": "^0.1.0",
     "rmscene-ts": "^0.1.0",
     "zod": "4.4.3"
   },

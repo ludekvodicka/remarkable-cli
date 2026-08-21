@@ -22,7 +22,7 @@ npm run build
 node dist/cli.js --help
 ```
 
-Node 20.9 or newer.
+Node 22 or newer, the floor `rmindex-ts` sets through `better-sqlite3`.
 
 `SKILL.md` in this package is the agent-facing guide: what to run for a given request, and what not
 to do. Point an AI assistant at it rather than at this README.

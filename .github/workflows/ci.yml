@@ -1,7 +1,7 @@
 name: CI
 
-# rmcommunication-ts is a local link again while the mirror work is unreleased, so CI has to build the
-# sibling. This goes back to a plain checkout once the new library version is on npm.
+# Every sibling comes from the registry like any other dependency, so this job checks out nothing but
+# itself.
 
 on:
   push:
@@ -16,31 +16,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [20, 22]
+        node: [22, 24]
     steps:
       - uses: actions/checkout@v4
-        with:
-          path: remarkable-cli
-      - uses: actions/checkout@v4
-        with:
-          repository: "${{ github.repository_owner }}/rmcommunication-ts"
-          path: rmcommunication-ts
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           cache: npm
-          cache-dependency-path: |
-            rmcommunication-ts/package-lock.json
-            remarkable-cli/package-lock.json
       - run: npm ci
-        working-directory: rmcommunication-ts
-      - run: npm run build
-        working-directory: rmcommunication-ts
-      - run: npm ci
-        working-directory: remarkable-cli
       - run: npm run check
-        working-directory: remarkable-cli
       - run: npm audit --audit-level=low
-        working-directory: remarkable-cli
       - run: npm pack --dry-run
-        working-directory: remarkable-cli

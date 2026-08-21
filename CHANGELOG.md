@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0 - unreleased
+## 0.2.0 - 2026-08-21
 
 - Adds the `mirror` command group: `sync` and `watch` keep a local copy of the tablet without
   interrupting it, `index` builds the catalog and renders changed pages, `search` finds documents by
