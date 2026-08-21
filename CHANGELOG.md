@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.0 - unreleased
+
+- Adds the `mirror` command group: `sync` and `watch` keep a local copy of the tablet without
+  interrupting it, `index` builds the catalog and renders changed pages, `search` finds documents by
+  name, folder path and typed text, `page` copies a rendered page out, and `status` reports what the
+  mirror holds.
+- Adds `mcp serve`, a read-only MCP server over the local mirror with six tools and no sync, write or
+  delete tool. It opens no device connection and needs no credentials.
+- Runs mirror and MCP commands with no `RMCLI_HOST` or `RMCLI_FINGERPRINT` set: host settings are
+  resolved on demand and a local command takes no device lock. A long-lived command takes the lock per
+  iteration instead of holding it for its whole run.
+- Drops the `esbuild` install-script approval: nothing needs it.
+
 ## 0.1.1 - 2026-08-20
 
 - Consumes the published libraries instead of local `file:` links.
