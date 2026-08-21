@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.2 - 2026-08-21
+
+- Reports the MCP server version from the package metadata instead of a separate hard-coded value,
+  with a protocol-level regression test that checks `serverInfo.version` during initialization.
+
 ## 0.2.1 - 2026-08-21
 
 - Takes `rmcommunication-ts` 0.2.2 and `rmindex-ts` 0.1.1. Together they fix two things the first live

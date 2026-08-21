@@ -7,6 +7,7 @@ import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { openMirrorIndex } from "rmindex-ts";
 import { afterEach, describe, expect, it } from "vitest";
 
+import packageMetadata from "../package.json" with { type: "json" };
 import { buildServer } from "../src/commands/mcp.js";
 
 const DOCUMENT_ID = "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee";
@@ -18,6 +19,15 @@ afterEach(async () => {
 });
 
 describe("mcp server over the mirror", () => {
+  it("reports the package version in serverInfo", async () => {
+    const { client, close } = await connected();
+    try {
+      expect(client.getServerVersion()).toEqual({ name: "rmcli-mirror", version: packageMetadata.version });
+    } finally {
+      await close();
+    }
+  });
+
   it("exposes exactly the read-only tool set", async () => {
     const { client, close } = await connected();
     try {

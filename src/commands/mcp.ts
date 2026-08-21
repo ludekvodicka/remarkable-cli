@@ -6,6 +6,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { openMirrorIndex, pageImagePath, type MirrorIndex } from "rmindex-ts";
 import { z } from "zod";
 
+import packageMetadata from "../../package.json" with { type: "json" };
 import type { Command } from "../context.js";
 import { mirrorDirectory } from "./mirror.js";
 
@@ -40,7 +41,7 @@ export const mcpServe: Command = {
 // Read-only by construction: every tool reads the local mirror, none of them opens a device
 // connection, and there is deliberately no sync, write or delete tool and no escape hatch.
 export function buildServer(mirrorRoot: string, index: MirrorIndex): McpServer {
-  const server = new McpServer({ name: "rmcli-mirror", version: "0.2.0" });
+  const server = new McpServer({ name: "rmcli-mirror", version: packageMetadata.version });
 
   server.registerTool("search", {
     description: "Search the mirrored tablet by document name, folder path and typed page text.",
