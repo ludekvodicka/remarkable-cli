@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1 - 2026-08-21
+
+- Takes `rmcommunication-ts` 0.2.2 and `rmindex-ts` 0.1.1. Together they fix two things the first live
+  run of the mirror found: `mirror index` failed on every page of a long scrolled note with
+  `Input image exceeds pixel limit`, and it counted trashed documents, so it reported more of them than
+  `mirror status` and `device status` did.
+
 ## 0.2.0 - 2026-08-21
 
 - Adds the `mirror` command group: `sync` and `watch` keep a local copy of the tablet without
